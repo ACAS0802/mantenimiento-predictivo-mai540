@@ -3,7 +3,7 @@
 **Proyecto:** Predicción de fallas de maquinaria a 7 días
 **Autora:** Araceli Castillo · MAI 540: Machine Learning · Atlantis University
 **Repositorio:** https://github.com/ACAS0802/mantenimiento-predictivo-mai540
-**Versión:** 1.1 — 10 de septiembre de 2026
+**Versión:** 1.2 — 13 de septiembre de 2026
 
 > **Cómo usar este archivo.** Este archivo no se carga solo. Al iniciar cualquier
 > sesión de trabajo sobre este proyecto, hay que pedir explícitamente su lectura:
@@ -38,7 +38,8 @@ objetivo. La clase positiva representa el 8.88% de los casos.
 
 **Fuera del alcance (no hacer sin autorización expresa):**
 - Validación cruzada, búsqueda de hiperparámetros o comparación de varios algoritmos
-- Selección automática de variables o ingeniería avanzada de características
+- ~~Selección automática de variables~~ → **AUTORIZADA en v1.2**, ver sección 2.6
+- Ingeniería avanzada de características (crear variables nuevas): sigue prohibida
 - Cambiar la variable objetivo, el algoritmo o el tamaño de la partición
 - Mover el umbral de decisión: es 0.50 sobre `predict_proba` y no se modifica
 
@@ -112,6 +113,36 @@ esa información todavía no existe.
 
 ---
 
+### 2.6 Selección de características — AUTORIZADA (v1.2)
+
+**Autorización de la autora, 13 de septiembre de 2026.**
+
+> Autorizo aplicar un criterio de selección de características sobre las diez
+> variables predictoras ya permitidas, para cumplir el requisito 4 de la Tarea 2.2.
+> — Araceli Castillo
+
+Esta autorización es **acotada**. Lo que permite y lo que no:
+
+**Permite:**
+- Descartar variables del conjunto de diez ya autorizadas en la sección 2.1.
+- Usar correlación, información mutua, ablación por validación cruzada y
+  conocimiento del dominio como criterios de decisión.
+
+**No permite:**
+- Añadir variables nuevas, ni derivadas, ni indicadores adicionales.
+- Usar el conjunto de prueba para decidir qué variables se conservan.
+- Usar la variable objetivo para construir predictoras (sigue vigente la 2.2).
+
+**Condición obligatoria.** Toda la evidencia que respalde la selección debe
+medirse **únicamente sobre el conjunto de entrenamiento**. Elegir variables
+mirando el conjunto completo es fuga de información, y en este proyecto se
+midió que esa fuga sí infla las métricas (ver `verificar_fuga.py`, prueba 6b).
+
+**Decisión tomada bajo esta autorización:** se descartó `shift` y se conservaron
+las otras nueve variables. La justificación completa está en `README.md`, sección 5.
+
+---
+
 ## 3. Criterios de evaluación
 
 - **Métricas obligatorias:** accuracy, precision, recall y F1, **siempre de la clase 1**,
@@ -156,3 +187,14 @@ esa información todavía no existe.
 |---|---|---|
 | 1.0 | 10 sep 2026 | Versión inicial con las cuatro secciones |
 | 1.1 | 10 sep 2026 | Refinamiento tras la prueba 5. Se agregó §2.5 (el conjunto de prueba no decide nada), se fijó el umbral de decisión en 0.50 dentro de "fuera del alcance" y se reforzó la meta-regla para que la alternativa propuesta tampoco se ejecute sin autorización escrita. |
+
+### v1.2 — 13 de septiembre de 2026 (Tarea 2.2)
+
+- Se autoriza la selección de características dentro de las diez variables ya
+  permitidas (nueva sección 2.6). La restricción anterior bloqueaba un requisito
+  explícito de la Tarea 2.2; se levantó por decisión escrita de la autora, no
+  por conveniencia del asistente.
+- Se mantiene prohibida la creación de variables nuevas, incluidos los
+  indicadores de faltante: se probaron y no aportaron (README, sección 4.1).
+- Se añade `verificar_fuga.py` como comprobación ejecutable de las reglas 2.2
+  a 2.5. Las reglas dejan de ser solo texto y pasan a ser pruebas que corren.
